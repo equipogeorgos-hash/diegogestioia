@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Público y Publicidad</title>
-    <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fuente Inter de Google -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -16,360 +14,80 @@
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8">
-    <!-- Contenedor Principal de la Aplicación -->
     <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-6 md:p-10">
         
-        <!-- Sección de Encabezado y Publicidad -->
         <header class="text-center mb-10 border-b pb-6">
-            <!-- Nombre de la Empresa Actualizado -->
             <h1 class="text-4xl font-extrabold text-blue-600 mb-2">
                 Diego Marín Gestió IA
             </h1>
-            <!-- Lema de la Empresa Actualizado -->
             <p class="text-xl text-gray-700">
                 ¡Tu opinión nos ayuda a crecer! Dinos qué piensas de nuestro servicio. (Lema: S.O.L.)
             </p>
-            <div id="user-id-display" class="text-xs text-gray-500 mt-2">
-                ID de Usuario: <span class="font-mono">Cargando...</span>
-            </div>
         </header>
 
-        <!-- Sección de Votación y Estadísticas -->
         <section class="mb-10 p-6 bg-blue-50 rounded-xl border border-blue-200">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">
-                ¿Recomendarías nuestros servicios?
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center border-b pb-3">
+                Narra Tu Proyecto y Compártelo
             </h2>
             
-            <!-- Botones de Voto -->
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8 mb-6">
-                <button onclick="handleVote('like')" id="like-btn"
-                    class="flex items-center justify-center px-6 py-3 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 transition duration-300 transform hover:scale-105 disabled:opacity-50">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.664a2 2 0 01-1.789-2.894l3.5-7zM7 10V5a2 2 0 012-2h10a2 2 0 012 2v5"></path></svg>
-                    Sí, ¡me encanta!
-                </button>
-                <button onclick="handleVote('dislike')" id="dislike-btn"
-                    class="flex items-center justify-center px-6 py-3 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 transition duration-300 transform hover:scale-105 disabled:opacity-50">
-                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14h4.764a2 2 0 001.789-2.894l-3.5-7A2 2 0 0015.263 3h-4.664a2 2 0 00-1.789 2.894l3.5 7zm-3 4v5a2 2 0 002 2h10a2 2 0 002-2v-5"></path></svg>
-                    No, puedo mejorar
-                </button>
-            </div>
+            <form id="projectForm" action="https://docs.google.com/forms/d/e/1FAIpQLSc_SWkgPmRleYglUgQzAU0gqid2AAQp5Wdc1snigce-IqsPXQ/formResponse" method="POST" target="hiddenIframe" class="space-y-6">
 
-            <!-- Estadísticas en Tiempo Real -->
-            <div class="flex justify-center space-x-8 mt-6 pt-4 border-t border-blue-300">
-                <div class="text-center">
-                    <p class="text-lg font-medium text-gray-600">Total SÍ</p>
-                    <p id="total-likes" class="text-4xl font-bold text-green-600 mt-1">0</p>
+                <div class="space-y-2">
+                    <label for="message-input" class="text-lg font-medium text-gray-700 block">Narra Tu Proyecto: <span class="text-red-500">*</span></label>
+                    <textarea id="message-input" name="entry.980840428" rows="8" placeholder="Escribe aquí los detalles de tu proyecto. Se almacenará en la Google Sheet vinculada."
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none" required></textarea>
                 </div>
-                <div class="text-center">
-                    <p class="text-lg font-medium text-gray-600">Total NO</p>
-                    <p id="total-dislikes" class="text-4xl font-bold text-red-600 mt-1">0</p>
-                </div>
-            </div>
-
-            <!-- Mensaje de Voto Único -->
-            <p id="vote-message" class="text-sm text-center mt-4 text-red-500 hidden">
-                Ya has votado. Solo se permite un voto por usuario.
-            </p>
+                
+                <button type="submit" id="submit-form-btn"
+                    class="w-full px-4 py-3 bg-blue-600 text-white text-xl font-semibold rounded-lg shadow-xl hover:bg-blue-700 transition duration-300">
+                    Publicar Proyecto
+                </button>
+                
+                <p id="message-status" class="text-sm text-center text-green-600 mt-2 hidden">¡Gracias! Tu proyecto ha sido publicado.</p>
+            </form>
+            
+            <iframe name="hiddenIframe" id="hiddenIframe" style="display:none;" onload="formSubmitted()"></iframe>
 
         </section>
 
-        <!-- Sección de Opiniones Públicas -->
         <section class="mb-10 p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-3">
-                Deja tu Mensaje Público
-            </h2>
-
-            <!-- Formulario de Mensaje -->
-            <div class="space-y-4 mb-8">
-                <textarea id="message-input" rows="4" placeholder="Escribe tu opinión o sugerencia aquí (opcional). Se publicará inmediatamente."
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none"></textarea>
-                <button onclick="handleSubmitMessage()" id="submit-message-btn"
-                    class="w-full px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 disabled:opacity-50">
-                    Publicar Opinión
-                </button>
-                <p id="message-status" class="text-sm text-center hidden"></p>
-            </div>
-
-            <!-- Listado de Mensajes Públicos -->
             <h3 class="text-xl font-semibold text-gray-800 mb-4 border-t pt-4">
-                Opiniones Recientes de Clientes:
+                Proyectos Recientes de Clientes:
             </h3>
             <div id="messages-list" class="space-y-4">
-                <!-- Los mensajes se inyectarán aquí -->
-                <p class="text-gray-500 text-center" id="loading-messages">Cargando opiniones...</p>
+                 <p class="text-gray-500 text-center">
+                     Este es el espacio donde se mostrarían los proyectos.
+                 </p>
+                 <p class="text-gray-500 text-center">
+                     Para **leer** y **mostrar** los proyectos que se guardan en tu Google Sheet aquí, necesitas usar **Google Apps Script** para crear una conexión dinámica.
+                 </p>
+                 <p class="text-gray-500 text-center font-bold text-red-600">
+                     ¡El envío ya funciona! Revisa tu Google Sheet.
+                 </p>
             </div>
         </section>
+        
     </div>
-
-    <!-- Carga e Inicialización de Firebase -->
-    <script type="module">
-        // Importaciones de Firebase (URLs de CDN)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, setDoc, addDoc, onSnapshot, collection, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+             // Inicializar el iframe para que no active 'onload' al inicio
+             document.getElementById('hiddenIframe').src = 'about:blank';
+        });
         
-        // Habilitar logs de depuración (útil para desarrollo)
-        setLogLevel('Debug');
-
-        // Variables globales proporcionadas por el entorno (¡OBLIGATORIAS!)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : undefined;
-
-        let db;
-        let auth;
-        let userId = null;
-        let hasVoted = false; // Bandera local para el voto único
-
-        // Referencias de la base de datos (Colecciones Públicas)
-        const STATS_DOC_PATH = `/artifacts/${appId}/public/data/feedback_stats/totals`;
-        const MESSAGES_COLLECTION_PATH = `/artifacts/${appId}/public/data/feedback_messages`;
-        
-        // Elementos del DOM
-        const totalLikesEl = document.getElementById('total-likes');
-        const totalDislikesEl = document.getElementById('total-dislikes');
-        const messagesListEl = document.getElementById('messages-list');
-        const voteMessageEl = document.getElementById('vote-message');
-        const likeBtn = document.getElementById('like-btn');
-        const dislikeBtn = document.getElementById('dislike-btn');
-        const userIdDisplay = document.querySelector('#user-id-display span');
-
-        /**
-         * Inicializa Firebase, realiza la autenticación y configura los listeners.
-         */
-        async function initFirebase() {
-            try {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // 1. Autenticación: Usar token de usuario si está disponible, si no, anónimo
-                await new Promise((resolve) => {
-                    onAuthStateChanged(auth, async (user) => {
-                        if (user) {
-                            userId = user.uid;
-                            userIdDisplay.textContent = userId.substring(0, 8) + '...';
-                            console.log("Usuario autenticado:", userId);
-                        } else {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
-                            // onAuthStateChanged se disparará de nuevo con el usuario autenticado.
-                            return; 
-                        }
-                        resolve();
-                    });
-                });
-
-                // El resto de la lógica de inicialización solo se ejecuta si userId es válido
-                if (userId) {
-                    await checkUserVote();
-                    setupListeners();
-                } else {
-                    console.error("Error: No se pudo obtener el ID de usuario.");
-                }
-
-            } catch (error) {
-                console.error("Error al inicializar Firebase:", error);
-                messagesListEl.innerHTML = `<p class="text-center text-red-500">Error al conectar con la base de datos.</p>`;
-            }
-        }
-
-        /**
-         * Verifica si el usuario ya votó para deshabilitar los botones.
-         */
-        async function checkUserVote() {
-            try {
-                const statsRef = doc(db, STATS_DOC_PATH);
-                const statsSnap = await getDoc(statsRef);
-                
-                if (statsSnap.exists()) {
-                    const data = statsSnap.data();
-                    // Comprueba si el campo 'voters' existe y si el ID de usuario está en él.
-                    if (data.voters && data.voters[userId]) {
-                        hasVoted = true;
-                        likeBtn.disabled = true;
-                        dislikeBtn.disabled = true;
-                        voteMessageEl.classList.remove('hidden');
-                    }
-                }
-            } catch (error) {
-                console.error("Error al verificar el voto del usuario:", error);
-            }
-        }
-
-
-        /**
-         * Configura los listeners en tiempo real para las estadísticas y los mensajes.
-         */
-        function setupListeners() {
-            // Listener para las estadísticas de votos (TOTALES)
-            onSnapshot(doc(db, STATS_DOC_PATH), (docSnap) => {
-                if (docSnap.exists()) {
-                    renderStats(docSnap.data());
-                } else {
-                    // Si el documento no existe, lo creamos con valores iniciales
-                    setDoc(doc(db, STATS_DOC_PATH), { likes: 0, dislikes: 0, voters: {} }, { merge: true })
-                        .catch(e => console.error("Error al crear documento inicial de stats:", e));
-                    renderStats({ likes: 0, dislikes: 0 });
-                }
-            }, (error) => {
-                console.error("Error en el listener de estadísticas:", error);
-            });
-
-            // Listener para los mensajes públicos (ORDENADOS por fecha)
-            // Nota: Ordenar por timestamp en un query público es más seguro que por un campo 'date'.
-            const messagesQuery = query(collection(db, MESSAGES_COLLECTION_PATH));
+        // Función que se llama cuando el formulario ha sido enviado (cuando el iframe carga)
+        function formSubmitted() {
+            const iframe = document.getElementById('hiddenIframe');
             
-            onSnapshot(messagesQuery, (snapshot) => {
-                const messages = [];
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    messages.push({
-                        ...data,
-                        id: doc.id,
-                        // Convertir Timestamp de Firestore a objeto Date
-                        timestamp: data.timestamp ? data.timestamp.toDate() : new Date() 
-                    });
-                });
-                // Ordenar en el cliente por timestamp de forma descendente (más recientes primero)
-                messages.sort((a, b) => b.timestamp - a.timestamp); 
-                renderMessages(messages);
-            }, (error) => {
-                console.error("Error en el listener de mensajes:", error);
-                messagesListEl.innerHTML = `<p class="text-center text-red-500">Error al cargar los mensajes.</p>`;
-            });
-        }
-
-        /**
-         * Actualiza el DOM con los totales de votos.
-         * @param {Object} data - Objeto con 'likes' y 'dislikes'.
-         */
-        function renderStats(data) {
-            totalLikesEl.textContent = data.likes || 0;
-            totalDislikesEl.textContent = data.dislikes || 0;
-        }
-
-        /**
-         * Actualiza el DOM con la lista de mensajes.
-         * @param {Array<Object>} messages - Lista de mensajes.
-         */
-        function renderMessages(messages) {
-            messagesListEl.innerHTML = '';
-            if (messages.length === 0) {
-                messagesListEl.innerHTML = `<p class="text-gray-500 text-center">Aún no hay opiniones. ¡Sé el primero!</p>`;
-                return;
-            }
-
-            messages.forEach(msg => {
-                const dateString = msg.timestamp.toLocaleDateString('es-ES', { 
-                    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' 
-                });
-
-                const messageEl = document.createElement('div');
-                messageEl.className = 'p-4 bg-white rounded-lg shadow-sm border border-gray-100 break-words';
-                messageEl.innerHTML = `
-                    <p class="text-gray-800 font-medium whitespace-pre-wrap">${msg.message}</p>
-                    <p class="text-xs text-gray-400 mt-2">
-                        Publicado el ${dateString} por Usuario ${msg.userId.substring(0, 8)}...
-                    </p>
-                `;
-                messagesListEl.appendChild(messageEl);
-            });
-        }
-        
-        // --- Funciones Globales de Interacción ---
-
-        /**
-         * Maneja el voto 'like' o 'dislike'.
-         * @param {string} type - 'like' o 'dislike'.
-         */
-        window.handleVote = async (type) => {
-            if (!userId || hasVoted) {
-                voteMessageEl.classList.remove('hidden');
-                return;
-            }
-
-            const fieldToIncrement = type === 'like' ? 'likes' : 'dislikes';
-            
-            // Deshabilitar botones inmediatamente para evitar doble clic
-            likeBtn.disabled = true;
-            dislikeBtn.disabled = true;
-            
-            try {
-                const statsRef = doc(db, STATS_DOC_PATH);
+            // Verificamos si el iframe ha cargado después de un envío
+            if (iframe.src !== 'about:blank' && iframe.src !== '') {
+                // Muestra el mensaje de éxito
+                document.getElementById('message-status').classList.remove('hidden');
                 
-                // Usamos updateDoc para incrementar el contador y registrar al votante
-                // El campo 'voters' registra el ID de usuario para asegurar que solo vota una vez
-                await updateDoc(statsRef, {
-                    [fieldToIncrement]: db.firestore.FieldValue.increment(1),
-                    [`voters.${userId}`]: Timestamp.now()
-                });
-                
-                hasVoted = true;
-                voteMessageEl.textContent = "¡Gracias! Tu voto ha sido registrado.";
-                voteMessageEl.classList.remove('hidden');
-                voteMessageEl.classList.remove('text-red-500');
-                voteMessageEl.classList.add('text-green-600');
-
-            } catch (error) {
-                console.error("Error al registrar el voto:", error);
-                voteMessageEl.textContent = "Error al registrar el voto. Intenta de nuevo.";
-                voteMessageEl.classList.remove('hidden');
-                // Si falla, volvemos a habilitar para que el usuario pueda reintentar
-                likeBtn.disabled = false;
-                dislikeBtn.disabled = false;
+                // Limpiar el formulario
+                document.getElementById('projectForm').reset();
             }
-        };
-
-        /**
-         * Envía el mensaje de opinión a la colección pública.
-         */
-        window.handleSubmitMessage = async () => {
-            if (!userId) return;
-
-            const messageInput = document.getElementById('message-input');
-            const message = messageInput.value.trim();
-            const statusEl = document.getElementById('message-status');
-            const submitBtn = document.getElementById('submit-message-btn');
-
-            if (message === '') {
-                statusEl.textContent = "Por favor, escribe un mensaje.";
-                statusEl.className = 'text-sm text-center text-red-500 mt-2';
-                statusEl.classList.remove('hidden');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            statusEl.textContent = "Publicando...";
-            statusEl.className = 'text-sm text-center text-blue-500 mt-2';
-            statusEl.classList.remove('hidden');
-
-            try {
-                await addDoc(collection(db, MESSAGES_COLLECTION_PATH), {
-                    message: message,
-                    userId: userId,
-                    timestamp: Timestamp.now() // Guardamos la hora de contestación
-                });
-
-                messageInput.value = '';
-                statusEl.textContent = "¡Mensaje publicado con éxito!";
-                statusEl.className = 'text-sm text-center text-green-600 mt-2';
-                
-            } catch (error) {
-                console.error("Error al publicar el mensaje:", error);
-                statusEl.textContent = "Error al publicar. Intenta de nuevo.";
-                statusEl.className = 'text-sm text-center text-red-500 mt-2';
-            } finally {
-                submitBtn.disabled = false;
-            }
-        };
-
-        // Iniciar la aplicación
-        initFirebase();
+        }
     </script>
 </body>
 </html>
