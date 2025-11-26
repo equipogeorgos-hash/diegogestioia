@@ -3,91 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback Público y Publicidad</title>
+    <title>Mantenimiento Diego</title>
+    <!-- Carga de Tailwind CSS para el diseño moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos personalizados para la tipografía y el fondo */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
         }
     </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-6 md:p-10">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Contenedor Principal de la Aplicación -->
+    <div class="w-full max-w-lg bg-white p-8 md:p-10 rounded-2xl shadow-2xl border-t-4 border-blue-600">
         
-        <header class="text-center mb-10 border-b pb-6">
-            <h1 class="text-4xl font-extrabold text-blue-600 mb-2">
-                Diego Marín Gestió IA
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-2">
+                ⚙️ Mantenimiento Diego
             </h1>
-            <p class="text-xl text-gray-700">
-                ¡Tu opinión nos ayuda a crecer! Dinos qué piensas de nuestro servicio. (Lema: S.O.L.)
-            </p>
+            <p class="text-gray-600 text-lg">Registro de Tareas Finalizadas</p>
         </header>
-
-        <section class="mb-10 p-6 bg-blue-50 rounded-xl border border-blue-200">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center border-b pb-3">
-                Narra Tu Proyecto y Compártelo
-            </h2>
+        
+        <!-- Formulario para Registrar el Mantenimiento -->
+        <form id="mantenimientoForm" class="space-y-6"> 
             
-            <form id="projectForm" action="https://docs.google.com/forms/d/e/1FAIpQLSc_SWkgPmRleYglUgQzAU0gqid2AAQp5Wdc1snigce-IqsPXQ/formResponse" method="POST" target="hiddenIframe" class="space-y-6">
-
-                <div class="space-y-2">
-                    <label for="message-input" class="text-lg font-medium text-gray-700 block">Narra Tu Proyecto: <span class="text-red-500">*</span></label>
-                    <textarea id="message-input" name="entry.980840428" rows="8" placeholder="Escribe aquí los detalles de tu proyecto. Se almacenará en la Google Sheet vinculada."
-                        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none" required></textarea>
-                </div>
-                
-                <button type="submit" id="submit-form-btn"
-                    class="w-full px-4 py-3 bg-blue-600 text-white text-xl font-semibold rounded-lg shadow-xl hover:bg-blue-700 transition duration-300">
-                    Publicar Proyecto
-                </button>
-                
-                <p id="message-status" class="text-sm text-center text-green-600 mt-2 hidden">¡Gracias! Tu proyecto ha sido publicado.</p>
-            </form>
-            
-            <iframe name="hiddenIframe" id="hiddenIframe" style="display:none;" onload="formSubmitted()"></iframe>
-
-        </section>
-
-        <section class="mb-10 p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4 border-t pt-4">
-                Proyectos Recientes de Clientes:
-            </h3>
-            <div id="messages-list" class="space-y-4">
-                 <p class="text-gray-500 text-center">
-                     Este es el espacio donde se mostrarían los proyectos.
-                 </p>
-                 <p class="text-gray-500 text-center">
-                     Para **leer** y **mostrar** los proyectos que se guardan en tu Google Sheet aquí, necesitas usar **Google Apps Script** para crear una conexión dinámica.
-                 </p>
-                 <p class="text-gray-500 text-center font-bold text-red-600">
-                     ¡El envío ya funciona! Revisa tu Google Sheet.
-                 </p>
+            <div class="space-y-2">
+                <label for="maintenance-description" class="text-lg font-semibold text-gray-700 block">
+                    Detalles del Mantenimiento Realizado:
+                </label>
+                <!-- 
+                    CRUCIAL: name="comment" debe coincidir con 'e.parameter.comment' en el Google Apps Script. 
+                -->
+                <textarea id="maintenance-description" name="comment" rows="6" 
+                    placeholder="Ejemplo: Se reemplazó el filtro de aire y se lubricaron las piezas móviles del motor."
+                    class="w-full p-4 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 resize-none transition duration-150 shadow-sm" required></textarea>
             </div>
-        </section>
-        
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-             // Inicializar el iframe para que no active 'onload' al inicio
-             document.getElementById('hiddenIframe').src = 'about:blank';
-        });
-        
-        // Función que se llama cuando el formulario ha sido enviado (cuando el iframe carga)
-        function formSubmitted() {
-            const iframe = document.getElementById('hiddenIframe');
             
-            // Verificamos si el iframe ha cargado después de un envío
-            if (iframe.src !== 'about:blank' && iframe.src !== '') {
-                // Muestra el mensaje de éxito
-                document.getElementById('message-status').classList.remove('hidden');
-                
-                // Limpiar el formulario
-                document.getElementById('projectForm').reset();
-            }
-        }
+            <!-- Botón de Envío -->
+            <button type="submit" id="submit-btn"
+                class="w-full px-6 py-3 bg-blue-600 text-white text-xl font-bold rounded-xl shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-blue-300">
+                Registrar Tarea Finalizada
+            </button>
+            
+            <!-- Mensajes de Estado -->
+            <p id="status-message" class="text-center text-base mt-4 font-medium hidden"></p>
+        </form>
+    </div>
+
+    <!-- Script de Conexión con Google Apps Script (El Puente) -->
+    <script>
+        // 🚨 PASO CRÍTICO: DEBES REEMPLAZAR ESTE TEXTO CON LA URL COMPLETA DE TU APLICACIÓN WEB DE APPS SCRIPT 🚨
+        // (La que obtuviste en el paso 2: https://script.google.com/macros/s/AKfyc.../exec)
+        const APP_SCRIPT_URL = "PEGAR_AQUI_LA_URL_DE_IMPLEMENTACION_APPS_SCRIPT"; 
+
+        document.getElementById('mantenimientoForm').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            const form = e.target;
+            const submitBtn = document.getElementById('submit-btn');
+            const statusMessage = document.getElementById('status-message');
+            
+            // 1. Prepara la interfaz para el envío
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Registrando...';
+            statusMessage.classList.add('hidden');
+            statusMessage.classList.remove('text-red-600', 'text-green-600');
+
+            // 2. Crea los datos del formulario (FormData recoge name="comment")
+            const formData = new FormData(form);
+
+            // 3. Envía los datos con fetch al Web App (esto resuelve el bloqueo CORS)
+            fetch(APP_SCRIPT_URL, {
+                method: 'POST',
+                body: formData 
+            })
+            .then(response => {
+                // Comprobación de que la URL de implementación es correcta.
+                if (response.url.includes("PEGAR_AQUI_LA_URL")) {
+                    throw new Error("ERROR: La URL del Apps Script no ha sido reemplazada. Por favor, pega la URL de implementación.");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.result === 'success') {
+                    statusMessage.textContent = '✅ Registro Exitoso: Tarea guardada en la hoja de cálculo.';
+                    statusMessage.classList.add('text-green-600');
+                    form.reset(); 
+                } else {
+                    statusMessage.textContent = `❌ Error al registrar: ${data.message || 'Error desconocido.'}`;
+                    statusMessage.classList.add('text-red-600');
+                }
+            })
+            .catch(error => {
+                statusMessage.textContent = `❌ Error de conexión: ${error.message}`;
+                statusMessage.classList.add('text-red-600');
+                console.error('Fetch Error:', error);
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Registrar Tarea Finalizada';
+                statusMessage.classList.remove('hidden');
+            });
+        });
     </script>
 </body>
 </html>
