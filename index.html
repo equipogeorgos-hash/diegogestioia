@@ -53,9 +53,8 @@
 
     <!-- Script de Conexión con Google Apps Script (El Puente) -->
     <script>
-        // 🚨 PASO CRÍTICO: DEBES REEMPLAZAR ESTE TEXTO CON LA URL COMPLETA DE TU APLICACIÓN WEB DE APPS SCRIPT 🚨
-        // (La que obtuviste en el paso 2: https://script.google.com/macros/s/AKfyc.../exec)
-        const APP_SCRIPT_URL = "PEGAR_AQUI_LA_URL_DE_IMPLEMENTACION_APPS_SCRIPT"; 
+        // 🚨 URL DE IMPLEMENTACIÓN ACTUALIZADA (Versión 2) 🚨
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqdg7MKdvgKWbdeplUr8Gv2_JlNpp7ZgjNjGSdYvqM_JBPu8lcT4BqWNrjDNrjP915pNQ/exec"; 
 
         document.getElementById('mantenimientoForm').addEventListener('submit', function(e) {
             e.preventDefault(); 
@@ -79,9 +78,9 @@
                 body: formData 
             })
             .then(response => {
-                // Comprobación de que la URL de implementación es correcta.
-                if (response.url.includes("PEGAR_AQUI_LA_URL")) {
-                    throw new Error("ERROR: La URL del Apps Script no ha sido reemplazada. Por favor, pega la URL de implementación.");
+                // Comprobación rápida para asegurar que la URL es un script válido.
+                if (!response.url.includes("script.google.com")) {
+                    throw new Error("ERROR: La URL del Apps Script no es de Google.");
                 }
                 return response.json();
             })
@@ -91,14 +90,17 @@
                     statusMessage.classList.add('text-green-600');
                     form.reset(); 
                 } else {
-                    statusMessage.textContent = `❌ Error al registrar: ${data.message || 'Error desconocido.'}`;
+                    // El Apps Script devolvió un error (ej. falló la hoja o el ID)
+                    statusMessage.textContent = `❌ ERROR en el Script: ${data.message || 'Verifica el Apps Script.'}`;
                     statusMessage.classList.add('text-red-600');
                 }
             })
             .catch(error => {
-                statusMessage.textContent = `❌ Error de conexión: ${error.message}`;
+                // Error de conexión (Red, CORS o URL incorrecta/sin permisos)
+                statusMessage.textContent = `❌ ERROR de Conexión/Permisos. Revisa la Consola del Navegador.`;
                 statusMessage.classList.add('text-red-600');
-                console.error('Fetch Error:', error);
+                console.error('Fetch Error Detail:', error);
+                console.warn('POSIBLE SOLUCIÓN: Confirma que la implementación del Apps Script está configurada como "Acceso: Cualquiera".');
             })
             .finally(() => {
                 submitBtn.disabled = false;
